@@ -4,6 +4,8 @@ using Accord.Imaging.Filters;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using HNUDIP;
+using ImageProcess2;
 
 namespace AsiaDigitalImageProcessor
 {
@@ -12,7 +14,10 @@ namespace AsiaDigitalImageProcessor
 
         private FilterInfoCollection videoDevices; 
         private VideoCaptureDevice videoSource;
-        private bool applyGrayscale = false, applySepia = false, applyInversion = false;
+        private bool applyGrayscale = false, applySepia = false, applyInversion = false,
+            applyFlipVertical = false, applyFlipHorizontal = false, applySmooth = false,
+            applyGuassianBlur = false, applyMeanRemoval = false, applySharpen = false,
+            applyEmbossLaplacian = false;
 
         public Form3()
         {
@@ -46,16 +51,6 @@ namespace AsiaDigitalImageProcessor
             }
         }
 
-        private void ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (videoDevices == null || videoDevices.Count == 0) return;
@@ -64,6 +59,7 @@ namespace AsiaDigitalImageProcessor
             videoSource.NewFrame += VideoSource_NewFrame;
             videoSource.Start();
         }
+
 
         private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -89,6 +85,76 @@ namespace AsiaDigitalImageProcessor
                 frame = invertFilter.Apply(frame);
             }
 
+            if (applyFlipVertical)
+            {
+
+                Bitmap originalFrame = (Bitmap)eventArgs.Frame.Clone();
+                Bitmap editedFrame = null;
+
+
+                if (originalFrame != null)
+                {
+                    ImageProcess.FlipVertical(ref originalFrame, ref editedFrame);
+                    frame = editedFrame;
+                }
+
+
+                originalFrame.Dispose();
+            }
+
+            if (applyFlipHorizontal)
+            {
+                Bitmap originalFrame = (Bitmap)eventArgs.Frame.Clone();
+                Bitmap editedFrame = null;
+
+
+                if (originalFrame != null)
+                {
+                    ImageProcess.Fliphorizontal(ref originalFrame, ref editedFrame);
+                    frame = editedFrame;
+                }
+
+
+                originalFrame.Dispose();
+            }
+
+            if (applySmooth)
+            {
+                Bitmap editedFrame = new Bitmap(frame);
+                BitmapFilter.Smooth(editedFrame);
+                frame = editedFrame;
+            }
+
+            if (applyGuassianBlur)
+            {
+                Bitmap editedFrame = new Bitmap(frame);
+                BitmapFilter.GaussianBlur(editedFrame);
+                frame = editedFrame;
+            }
+
+            if (applyMeanRemoval)
+            {
+                Bitmap editedFrame = new Bitmap(frame);
+                BitmapFilter.MeanRemoval(editedFrame);
+                frame = editedFrame; ;
+            }
+
+            if (applySharpen)
+            {
+                Bitmap editedFrame = new Bitmap(frame);
+                BitmapFilter.Sharpen(editedFrame);
+                frame = editedFrame;
+            }
+
+            if (applyEmbossLaplacian)
+            {
+                Bitmap editedFrame = new Bitmap(frame);
+                BitmapFilter.EmbossLaplacian(editedFrame);
+                frame = editedFrame;
+            }
+
+
+
             // Display the processed frame
             pictureBoxWebcam.Image = frame;
         }
@@ -105,11 +171,26 @@ namespace AsiaDigitalImageProcessor
         {
             if (checkBoxGrayscale.Checked)
             {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
                 applyGrayscale = true;
                 applySepia = false;
-                applyInversion = false;
                 checkBoxSepia.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
                 checkBoxInversion.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+
             }
             else
             {
@@ -121,11 +202,25 @@ namespace AsiaDigitalImageProcessor
         {
             if (checkBoxSepia.Checked)
             {
-                applySepia = true;
-                applyGrayscale = false;
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
                 applyInversion = false;
-                checkBoxGrayscale.Checked = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = true;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
                 checkBoxInversion.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
             }
             else
             {
@@ -138,9 +233,23 @@ namespace AsiaDigitalImageProcessor
             
             if (checkBoxInversion.Checked)
             {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
                 applyInversion = true;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
                 applyGrayscale = false;
                 applySepia = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
                 checkBoxGrayscale.Checked = false;
                 checkBoxSepia.Checked = false;
             }
@@ -149,6 +258,224 @@ namespace AsiaDigitalImageProcessor
                 applyInversion = false;
             }
         }
+
+
+        private void checkBoxFlipVert_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxFlipVert.Checked)
+            {
+                applyFlipVertical = true;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxEmboss.Checked = false;
+            }
+            else
+            {
+                applyFlipVertical = false;
+            }
+        }
+
+        private void checkBoxHorizontal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxHorizontal.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = true;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxSmooth.Checked = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked=false;
+            }
+            else
+            {
+                applyFlipHorizontal = false;
+            }
+
+        }
+
+        private void checkBoxSmooth_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSmooth.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = true;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxHorizontal.Checked = false;
+            }
+            else
+            {
+                applySmooth = false;
+            }
+        }
+
+        private void checkBoxMeanRemoval_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxMeanRemoval.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = true;
+                applyGrayscale = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+            }
+            else
+            {
+                applyMeanRemoval = false;
+            }
+        }
+
+        private void checkBoxGaussian_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGaussian.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = true;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+            }
+            else
+            {
+                applyGuassianBlur = false;
+            }
+        }
+
+        private void checkBoxSharpen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSharpen.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = false;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = true;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxEmboss.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+            }
+            else
+            {
+                applySharpen = false;
+            }
+        }
+
+
+        private void checkBoxEmboss_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEmboss.Checked)
+            {
+                applyFlipVertical = false;
+                applyFlipHorizontal = false;
+                applyEmbossLaplacian = true;
+                applyGuassianBlur = false;
+                applyInversion = false;
+                applySmooth = false;
+                applySharpen = false;
+                applyMeanRemoval = false;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxMeanRemoval.Checked = false;
+                checkBoxGaussian.Checked = false;
+                checkBoxSharpen.Checked = false;
+                checkBoxFlipVert.Checked = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+                checkBoxHorizontal.Checked = false;
+                checkBoxSmooth.Checked = false;
+            }
+            else
+            {
+                applyEmbossLaplacian = false;
+            }
+        }
+
+
+
+
+
+
 
         private void button3_Click(object sender, EventArgs e)
         {

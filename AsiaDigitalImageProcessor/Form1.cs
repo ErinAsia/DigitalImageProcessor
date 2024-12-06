@@ -422,6 +422,8 @@ namespace AsiaDigitalImageProcessor
 
         private void button7_Click(object sender, EventArgs e)
         {
+            ClearPictureBoxes();
+
             Form2 secondForm = new Form2();
             secondForm.StartPosition = FormStartPosition.CenterScreen;
             secondForm.Show();
@@ -431,11 +433,28 @@ namespace AsiaDigitalImageProcessor
 
         private void button8_Click(object sender, EventArgs e)
         {
+            ClearPictureBoxes();
+
             Form3 thirdForm = new Form3();
             thirdForm.StartPosition = FormStartPosition.CenterScreen;
             thirdForm.Show();
 
             this.Hide();
+        }
+
+        private void ClearPictureBoxes()
+        {
+            foreach (Control control in this.Controls)
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    if (pictureBox.Image != null)
+                    {
+                        pictureBox.Image.Dispose(); // Dispose of the image to free resources
+                        pictureBox.Image = null;
+                    }
+                }
+            }
         }
     }
 }

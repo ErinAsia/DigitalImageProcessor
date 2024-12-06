@@ -45,11 +45,28 @@ namespace AsiaDigitalImageProcessor
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ClearPictureBoxes();
+
             Form1 form1 = new Form1();
             form1.StartPosition = FormStartPosition.CenterScreen;
             form1.Show();
 
             this.Close();
+        }
+
+        private void ClearPictureBoxes()
+        {
+            foreach (Control control in this.Controls)
+            {
+                if (control is PictureBox pictureBox)
+                {
+                    if (pictureBox.Image != null)
+                    {
+                        pictureBox.Image.Dispose(); // Dispose of the image to free resources
+                        pictureBox.Image = null;
+                    }
+                }
+            }
         }
 
         private void SaveOriginalImage(string buttonName)
