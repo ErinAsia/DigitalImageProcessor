@@ -134,3 +134,10 @@ C:\Users\Erin\Desktop\DIP\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\De
 C:\Users\Erin\Desktop\DIP\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.xml
 C:\Users\Erin\Desktop\DIP\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.DirectShow.xml
 C:\Users\Erin\Desktop\DIP\DigitalImageProcessor\AsiaDigitalImageProcessor\obj\Debug\AsiaDigitalImageProcessor.Form3.resources
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.dll
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.DirectShow.dll
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.dll
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.xml
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.xml
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\bin\Debug\AForge.Video.DirectShow.xml
+C:\Users\TSE\Desktop\SchoolRepo\DigitalImageProcessor\AsiaDigitalImageProcessor\obj\Debug\AsiaDigitalImageProcessor.Form3.resources

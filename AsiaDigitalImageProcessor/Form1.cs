@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HNUDIP;
 using ImageProcess2;
+using System.Diagnostics;
 
 namespace AsiaDigitalImageProcessor
 {
@@ -310,59 +311,54 @@ namespace AsiaDigitalImageProcessor
         private void button13_Click(object sender, EventArgs e)
         {
             if (originalImage == null)
-            {
-                MessageBox.Show("No image to smooth.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
 
-            Bitmap smoothedImage = (Bitmap)originalImage.Clone();
-
-            bool success = BitmapFilter.Smooth(ref smoothedImage, 1); // Apply smoothing with default weight
-
-            if (success)
-            {
-                originalImage = smoothedImage;
-                pictureBox2.Image = originalImage;
-                pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-                MessageBox.Show("Smoothing applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("Smoothing failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            editedImage = new Bitmap(originalImage);
+            BitmapFilter.Smooth(editedImage);
+            pictureBox2.Image = editedImage;
         }
 
         private void button14_Click(object sender, EventArgs e)
         {
             if (originalImage == null)
-            {
-                MessageBox.Show("No image to smooth.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
 
-            Bitmap gussianBlur = (Bitmap)originalImage.Clone();
-
-            bool success = BitmapFilter.GaussianBlur(ref gussianBlur, 4); // Apply smoothing with default weight
-
-            if (success)
-            {
-                originalImage = gussianBlur;
-                pictureBox2.Image = originalImage;
-                pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-                MessageBox.Show("GussianBlur applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("GussianBlur failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            editedImage = new Bitmap(originalImage);
+            BitmapFilter.GaussianBlur(editedImage);
+            pictureBox2.Image = editedImage;
         }
 
 
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+                return;
+
+            editedImage = new Bitmap(originalImage);
+            BitmapFilter.MeanRemoval(editedImage);
+            pictureBox2.Image = editedImage;
+        }
 
 
+        private void button16_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+                return;
 
+            editedImage = new Bitmap(originalImage);
+            BitmapFilter.Sharpen(editedImage);
+            pictureBox2.Image = editedImage;
+        }
 
+        private void button17_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+                return;
 
+            editedImage = new Bitmap(originalImage);
+            BitmapFilter.EmbossLaplacian(editedImage);
+            pictureBox2.Image = editedImage;
+        }
 
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -372,6 +368,8 @@ namespace AsiaDigitalImageProcessor
             pictureBox2.Image = editedImage;
             
         }
+
+
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {

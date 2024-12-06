@@ -69,7 +69,7 @@ namespace AsiaDigitalImageProcessor
         {
             // Clone the current frame
             Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
-
+ 
             // Apply filters based on user selection
             if (applyGrayscale)
             {
@@ -103,17 +103,51 @@ namespace AsiaDigitalImageProcessor
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            applyGrayscale = checkBoxGrayscale.Checked;
+            if (checkBoxGrayscale.Checked)
+            {
+                applyGrayscale = true;
+                applySepia = false;
+                applyInversion = false;
+                checkBoxSepia.Checked = false;
+                checkBoxInversion.Checked = false;
+            }
+            else
+            {
+                applyGrayscale = false;
+            }
         }
 
         private void checkBoxSepia_CheckedChanged(object sender, EventArgs e)
         {
-            applySepia = checkBoxSepia.Checked;
+            if (checkBoxSepia.Checked)
+            {
+                applySepia = true;
+                applyGrayscale = false;
+                applyInversion = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxInversion.Checked = false;
+            }
+            else
+            {
+                applySepia = false;
+            }
         }
 
         private void checkBoxInversion_CheckedChanged(object sender, EventArgs e)
         {
-            applyInversion = checkBoxInversion.Checked;
+            
+            if (checkBoxInversion.Checked)
+            {
+                applyInversion = true;
+                applyGrayscale = false;
+                applySepia = false;
+                checkBoxGrayscale.Checked = false;
+                checkBoxSepia.Checked = false;
+            }
+            else
+            {
+                applyInversion = false;
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
