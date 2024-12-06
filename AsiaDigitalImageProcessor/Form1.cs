@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using HNUDIP;
+using ImageProcess2;
 
 namespace AsiaDigitalImageProcessor
 {
@@ -93,7 +95,6 @@ namespace AsiaDigitalImageProcessor
             originalImage = (Bitmap)Bitmap.FromFile(filePath);
 
         }
-
 
         //This button2 is for Copy Image
         private void button2_Click(object sender, EventArgs e)
@@ -274,6 +275,120 @@ namespace AsiaDigitalImageProcessor
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.FlipVertical(ref originalImage, ref editedImage);
+            pictureBox2.Image = editedImage;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Fliphorizontal(ref originalImage, ref editedImage);
+            pictureBox2.Image = editedImage;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Scale(ref originalImage, ref editedImage, 200, 200);
+            pictureBox2.Image = editedImage;
+
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Scale(ref originalImage, ref editedImage, 1280, 900);
+            pictureBox2.Image = editedImage;
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show("No image to smooth.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Bitmap smoothedImage = (Bitmap)originalImage.Clone();
+
+            bool success = BitmapFilter.Smooth(ref smoothedImage, 1); // Apply smoothing with default weight
+
+            if (success)
+            {
+                originalImage = smoothedImage;
+                pictureBox2.Image = originalImage;
+                pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+                MessageBox.Show("Smoothing applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Smoothing failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            if (originalImage == null)
+            {
+                MessageBox.Show("No image to smooth.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Bitmap gussianBlur = (Bitmap)originalImage.Clone();
+
+            bool success = BitmapFilter.GaussianBlur(ref gussianBlur, 4); // Apply smoothing with default weight
+
+            if (success)
+            {
+                originalImage = gussianBlur;
+                pictureBox2.Image = originalImage;
+                pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+                MessageBox.Show("GussianBlur applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("GussianBlur failed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+
+
+
+
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Rotate(ref originalImage, ref editedImage, trackBar1.Value);
+            pictureBox2.Image = editedImage;
+            
+        }
+
+        private void trackBar2_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Threshold(ref originalImage, ref editedImage, trackBar2.Value);
+            pictureBox2.Image = editedImage;
+
+        }
+
+        private void trackBar3_Scroll(object sender, EventArgs e)
+        {
+            if (originalImage == null) return;
+            ImageProcess.Brightness(ref originalImage, ref editedImage, trackBar2.Value);
+            pictureBox2.Image = editedImage;
+        }
+
+
         private void SaveImage_Click(object sender, EventArgs e)
         {
             string sourcepath = AppDomain.CurrentDomain.BaseDirectory;
@@ -285,11 +400,12 @@ namespace AsiaDigitalImageProcessor
                 Directory.CreateDirectory(uploadDirectory2);
             }
 
-            // Copy the file to the folder
+            
             fileName = Path.GetFileName(sourceFilePath);
             destinationFilePath = Path.Combine(uploadDirectory2, fileName);
 
             SaveImages(destinationFilePath);
+            MessageBox.Show($"Image saved successfully at:\n{destinationFilePath}", "Save Location", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Save Edited Image
@@ -311,6 +427,15 @@ namespace AsiaDigitalImageProcessor
             Form2 secondForm = new Form2();
             secondForm.StartPosition = FormStartPosition.CenterScreen;
             secondForm.Show();
+
+            this.Hide();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Form3 thirdForm = new Form3();
+            thirdForm.StartPosition = FormStartPosition.CenterScreen;
+            thirdForm.Show();
 
             this.Hide();
         }
